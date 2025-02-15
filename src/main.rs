@@ -6,7 +6,7 @@ fn hashcash(header: &str, difficulty: u32) -> String {
     let mut nonce = 0u64;
     loop {
         let input = format!("{}{}", header, nonce);
-        
+
         let hash_str = digest(&input);
         let hash_bytes = hex::decode(&hash_str).unwrap();
 
@@ -34,8 +34,8 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use sha256::digest;
     use primitive_types::U256;
+    use sha256::digest;
 
     #[test]
     fn hash_test() {
@@ -64,7 +64,8 @@ mod tests {
 
         // Noir's prime field for BN254:
         //   21888242871839275222246405745257275088548364400416034343698204186575808495617
-        let noir_prime_str = "21888242871839275222246405745257275088548364400416034343698204186575808495617";
+        let noir_prime_str =
+            "21888242871839275222246405745257275088548364400416034343698204186575808495617";
         let noir_prime = U256::from_dec_str(noir_prime_str).unwrap();
 
         // Reduce mod Noir's prime
@@ -76,4 +77,3 @@ mod tests {
         assert!(true);
     }
 }
-
