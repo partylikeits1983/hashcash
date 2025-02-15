@@ -1,9 +1,20 @@
 fn main(prev_hash: pub Field, nonce: Field, solution: Field, _address: pub Field) {
 
+    let prev_hash_bytes: [u8; 8] = prev_hash.to_be_bytes();
+    let nonce_bytes: [u8; 8] = nonce.to_be_bytes();
+
+    let mut combined_bytes: [u8; 16] = [0; 16];
+    for i in 0..8 {
+        combined_bytes[i] = prev_hash_bytes[i];
+        combined_bytes[i + 8] = nonce_bytes[i];
+    }
+
+
+
 }
 
 #[test]
-fn test_main() {
+fn test_hash() {
     // test case: input_1 and input_2
     let input_1: Field = 0x1;
     let input_2: Field = 0x1;
@@ -31,6 +42,7 @@ fn test_main() {
     println("hash:");
     println(hash);
 
-    // Here, you can verify whether that hash matches the one from your Rust test
-    // by copying over the final hex from the Rust test, if needed.
+    let hash_254: Field = Field::from_be_bytes::<32>(hash);
+    println(hash_254);
+
 }
