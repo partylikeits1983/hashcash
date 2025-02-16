@@ -33,12 +33,11 @@ fn test_main() {
     main(prev_hash, nonce, solution, address);
 }
 
-
 #[test]
 fn test_hash() {
     // test case: input_1 and input_2
     let input_1: Field = 0x123;
-    let input_2: Field = 0x123;
+    let input_2: Field = 0x54;
 
     // Convert each Field to an 8-byte array in big-endian order
     let input_1_bytes: [u8; 32] = input_1.to_be_bytes();
