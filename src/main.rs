@@ -1,25 +1,29 @@
 use hex;
 use primitive_types::U256;
 use sha256::digest;
-use std::str::FromStr;
 
 fn hashcash(header_hex: &str, difficulty: u32) -> String {
-    // 1) Parse the given header hex as U256
     let header_u256 = U256::from_str_radix(header_hex, 16).unwrap();
 
-    // 2) Noir's BN254 prime
+    // Noir's BN254 prime
     let noir_prime_str =
         "21888242871839275222246405745257275088548364400416034343698204186575808495617";
     let noir_prime = U256::from_dec_str(noir_prime_str).unwrap();
 
-    // 3) We'll iterate over a 64-bit nonce
-    let mut nonce: u64 = 0u64;
+    let mut nonce: u128 = 0u128;
     loop {
         let header_be = header_u256.to_big_endian();
 
-        let nonce_be = U256::from_str(&format!("{}", nonce))
+        let nonce_256 = U256::from_dec_str(&format!("{}", nonce));
+
+        println!("print nonce: {:?} nonce_256: {:?}", nonce, nonce_256);
+
+        let nonce_be = U256::from_dec_str(&format!("{}", nonce))
             .unwrap()
             .to_big_endian();
+
+        println!("header be: {:?}", header_be);
+        println!("nonce be: {:?}", nonce_be);
 
         // -- Concatenate => 16 total bytes --
         let mut combined = Vec::with_capacity(64);
@@ -33,6 +37,8 @@ fn hashcash(header_hex: &str, difficulty: u32) -> String {
 
         // -- Reduce mod Noir’s BN254 prime --
         let hash_mod_prime = hash_u256 % noir_prime;
+
+        println!("hash_mod_prime: {:?}", hash_mod_prime);
 
         // -- Format the reduced hash (hex, zero-padded to 64 nibbles) --
         let formatted_hash = format!("{:064x}", hash_mod_prime);
@@ -51,7 +57,7 @@ fn hashcash(header_hex: &str, difficulty: u32) -> String {
 }
 
 fn main() {
-    let result = hashcash("123", 2);
+    let result = hashcash("0", 4);
     println!("{}", result);
 }
 
@@ -66,8 +72,8 @@ mod tests {
     #[test]
     fn hash_test_u256_inputs() {
         // Two U256 inputs (both are small: 0x123 fits in 64 bits)
-        let input_1 = U256::from_str("0x123").unwrap();
-        let input_2 = U256::from_str("0x54").unwrap();
+        let input_1 = U256::from_str("0").unwrap();
+        let input_2 = U256::from_str("0").unwrap();
 
         // -- STEP 1: Convert each input to 8 big-endian bytes (just like Noir) --
         let input_1_be = input_1.to_big_endian();
