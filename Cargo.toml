@@ -1,5 +1,5 @@
 [package]
-name = "hashcash_example"
+name = "hashcash"
 version = "0.1.0"
 edition = "2021"
 
