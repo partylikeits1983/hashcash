@@ -8,7 +8,9 @@ contract HashCashTest is Test {
     HashCash public hashcash;
 
     function setUp() public {
-        hashcash = new HashCash();
+        string memory name = "HashCash";
+        string memory symbol = "HASH";
+        hashcash = new HashCash(name, symbol);
     }
 
     function test_Increment() public view {
