@@ -14,10 +14,31 @@ fn main(prev_hash: pub Field, nonce: Field, solution: Field, _address: pub Field
 }
 
 #[test]
+fn test_main() {
+    let prev_hash: Field = 0x123;
+    let nonce: Field = 0x123;
+    let address: Field = 0;
+
+    let input_1_bytes: [u8; 8] = prev_hash.to_be_bytes();
+    let input_2_bytes: [u8; 8] = nonce.to_be_bytes();
+
+    let mut combined_bytes: [u8; 16] = [0; 16];
+    for i in 0..8 {
+        combined_bytes[i] = input_1_bytes[i];
+        combined_bytes[i + 8] = input_2_bytes[i];
+    }
+    let hash = std::sha256::sha256_var(combined_bytes, 16);
+    let solution: Field = Field::from_be_bytes::<32>(hash);
+
+    main(prev_hash, nonce, solution, address);
+}
+
+
+#[test]
 fn test_hash() {
     // test case: input_1 and input_2
-    let input_1: Field = 0x1;
-    let input_2: Field = 0x1;
+    let input_1: Field = 0x123;
+    let input_2: Field = 0x123;
 
     // Convert each Field to an 8-byte array in big-endian order
     let input_1_bytes: [u8; 8] = input_1.to_be_bytes();
