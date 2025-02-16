@@ -41,15 +41,15 @@ fn test_hash() {
     let input_2: Field = 0x123;
 
     // Convert each Field to an 8-byte array in big-endian order
-    let input_1_bytes: [u8; 8] = input_1.to_be_bytes();
-    let input_2_bytes: [u8; 8] = input_2.to_be_bytes();
+    let input_1_bytes: [u8; 32] = input_1.to_be_bytes();
+    let input_2_bytes: [u8; 32] = input_2.to_be_bytes();
 
-    let mut combined_bytes: [u8; 16] = [0; 16];
-    for i in 0..8 {
+    let mut combined_bytes: [u8; 64] = [0; 64];
+    for i in 0..32 {
         combined_bytes[i] = input_1_bytes[i];
-        combined_bytes[i + 8] = input_2_bytes[i];
+        combined_bytes[i + 32] = input_2_bytes[i];
     }
-    let hash = std::sha256::sha256_var(combined_bytes, 16);
+    let hash = std::sha256::sha256_var(combined_bytes, 64);
     let hash_field: Field = Field::from_be_bytes::<32>(hash);
 
     // Print out for debugging

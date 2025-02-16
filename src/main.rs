@@ -75,11 +75,14 @@ mod tests {
         let input_2 = U256::from_str("0x123").unwrap();
 
         // -- STEP 1: Convert each input to 8 big-endian bytes (just like Noir) --
-        let input_1_be = input_1.low_u64().to_be_bytes();
-        let input_2_be = input_2.low_u64().to_be_bytes();
+        let input_1_be = input_1.to_big_endian();
+        let input_2_be = input_2.to_big_endian();
+
+        println!("input 1: {:?}", input_1_be);
+        println!("input 2: {:?}", input_2_be);
 
         // -- STEP 2: Concatenate => 16 total bytes
-        let mut combined = Vec::with_capacity(16);
+        let mut combined = Vec::with_capacity(64);
         combined.extend_from_slice(&input_1_be);
         combined.extend_from_slice(&input_2_be);
 
@@ -98,7 +101,7 @@ mod tests {
         let noir_prime = U256::from_dec_str(noir_prime_str).unwrap();
         let hash_mod_prime = hash_u256 % noir_prime;
 
-        println!("Hash mod Noir's prime: 0x{:x}", hash_mod_prime);
+        println!("Hash mod Noir's prime: 0x0{:x}", hash_mod_prime);
 
         assert!(true);
     }
